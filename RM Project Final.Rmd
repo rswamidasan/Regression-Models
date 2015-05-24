@@ -77,9 +77,9 @@ The low p-values of the regressors (all << 1%) and their t-statistics indicate t
 
 ### 5.  Conclusions
 
-Using the coefficients from the results above, the final model is formalized in the equation below, which explains `r round(100 * sumF2$r.squared, 2)`% of the variation in **mpg**.
+Using the coefficients from the results above, the final model is formalized in the equation below, which explains `r round(100 * sumF2$r.squared, 2)`% of the variation in **mpg**.  An error term is included to account for the residuals.
 
-**mpg** = `r round(sumF2$coef[1,1], 2)` - `r round(-sumF2$coef[2,1], 2)` * **wt** + `r round(sumF2$coef[3,1], 2)` * **am** - `r round(-sumF2$coef[5,1], 2)` * **wt** * **am** + `r round(sumF2$coef[4,1], 2)` * **qsec**
+**mpg** = `r round(sumF2$coef[1,1], 2)` - `r round(-sumF2$coef[2,1], 2)` * **wt** + `r round(sumF2$coef[3,1], 2)` * **am** - `r round(-sumF2$coef[5,1], 2)` * **wt** * **am** + `r round(sumF2$coef[4,1], 2)` * **qsec** + $\epsilon$
 
 By setting **am** = 1 (for manual) and **am** = 0 (for automatic) in this equation and taking the difference, we find that **mpg** for manual cars is greater than **mpg** for automatics by `r round(sumF2$coef[3,1], 2)` - `r round(-sumF2$coef[5,1], 2)` * **wt**.  This difference is 0 at the crossover point: **wt** = (`r round(sumF2$coef[3,1], 2)` / `r round(-sumF2$coef[5,1], 2)`) x 1000 lbs = `r round(-1000 * sumF2$coef[3,1]/sumF2$coef[5,1], 2)` lbs.  Above this weight automatics are more fuel efficient than manual transmissions. 
 

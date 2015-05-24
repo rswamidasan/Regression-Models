@@ -253,10 +253,11 @@ all residuals are within a Cook's distance of 0.5.
 
 Using the coefficients from the results above, the final model is
 formalized in the equation below, which explains 89.59\% of the
-variation in \textbf{mpg}.
+variation in \textbf{mpg}. An error term is included to account for the
+residuals.
 
 \textbf{mpg} = 9.72 - 2.94 * \textbf{wt} + 14.08 * \textbf{am} - 4.14 *
-\textbf{wt} * \textbf{am} + 1.02 * \textbf{qsec}
+\textbf{wt} * \textbf{am} + 1.02 * \textbf{qsec} + \(\epsilon\)
 
 By setting \textbf{am} = 1 (for manual) and \textbf{am} = 0 (for
 automatic) in this equation and taking the difference, we find that
