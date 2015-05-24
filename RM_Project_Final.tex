@@ -93,9 +93,9 @@ this end, we develop a linear regression model to explain the variation
 in the mileage of the cars in the data set based on the other 10
 parameters.
 
-The short answer is -- it depends \ldots{} on the weight of the car. All
-other factors being the same, the expected mileage (in mpg) of a car
-with manual transmission exceeds that of a car with automatic
+The short answer turns out to be: It depends \ldots{} on the weight of
+the car. All other factors being the same, the expected mileage (in mpg)
+of a car with manual transmission exceeds that of a car with automatic
 transmission by 14.08 - 4.14 x the weight of the car in 1,000 lbs. In
 other words, below approximately 3,400 lbs, cars with manual
 transmission are more fuel efficient than automatics, all other factors
@@ -126,11 +126,15 @@ Fig 1 in the Appendix shows this plot. We see from Fig 1 that the lines
 for Automatic and Manual transmissions have different slopes, and
 intersect near the center of the plot. This indicates a dependence of
 \textbf{mpg} on an interaction between \textbf{wt} and \textbf{am}. If
-there were no interaction, these lines would be parallel.
+there were no interaction, these lines would be parallel. Because they
+intersect near the center of the plot, there is a good chance that
+manuals may have better mileage in some weight range, but lower mileage
+than automatics in some other range.
 
-\subsubsection{3. Methodology}\label{methodology}
+\subsubsection{3. Model Selection
+Strategy}\label{model-selection-strategy}
 
-Our model development follows the iterative methodology below.
+Our model selection follows the iterative methodology below.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -141,18 +145,18 @@ Our model development follows the iterative methodology below.
   \begin{itemize}
   \itemsep1pt\parskip0pt\parsep0pt
   \item
-    A regressor, \textbf{wt}, that we know we should include, a
-    \emph{known known}.
+    A regressor, \textbf{wt}, that we know we should include -- a
+    \textbf{\emph{known known}}.
   \item
     A regressor, \textbf{am}, that we would like to include -- a
-    \emph{known unknown}.
+    \textbf{\emph{known unknown}}.
   \item
     The interaction term, \textbf{wt} * \textbf{am}, on the basis of the
     evidence in Fig 1.
   \end{itemize}
 \item
   Verify from the fit that the p-values for all regressor terms are
-  below 1\%,
+  below 1\%. If not, discard the offending regressor.
 \item
   Build the next model:
 
@@ -178,8 +182,7 @@ Our model development follows the iterative methodology below.
 
 \subsubsection{4. Model Development}\label{model-development}
 
-Execution of the methodology given in the previous section results in a
-rapid convergence.
+Execution of the strategy detailed above results in a rapid convergence.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -228,7 +231,7 @@ of the results of Model 2 are in Fig 2 in the Appendix.
 \begin{verbatim}
 ## Analysis of Variance Table
 ## 
-## Model 1: mpg ~ wt + am + wt:am
+## Model 1: mpg ~ wt * am
 ## Model 2: mpg ~ wt + am + qsec + wt:am
 ##   Res.Df    RSS Df Sum of Sq      F   Pr(>F)    
 ## 1     28 188.01                                 
@@ -237,7 +240,11 @@ of the results of Model 2 are in Fig 2 in the Appendix.
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
 
-Fig 2 shows that the the residuals are randomly, homoskedastically
+The low p-values of the regressors (all \textless{}\textless{} 1\%) and
+their t-statistics indicate that there is a low probabilty that any of
+them are superfluous. The low ANOVA p-value indicates that the regressor
+added in Model 2 contributes to the explanatory power of the model. Fig
+2 shows that the the residuals are randomly and homoskedastically
 distributed about the fitted line. The Q-Q plot shows that the residuals
 have a close to normal distribution. The Leverage plot indicates that
 all residuals are within a Cook's distance of 0.5.
@@ -255,26 +262,32 @@ By setting \textbf{am} = 1 (for manual) and \textbf{am} = 0 (for
 automatic) in this equation and taking the difference, we find that
 \textbf{mpg} for manual cars is greater than \textbf{mpg} for automatics
 by 14.08 - 4.14 * \textbf{wt}. This difference is 0 at the crossover
-point: \textbf{wt} = (14.08 / 4.14) x 1000 lbs = 3399.7 lbs.
+point: \textbf{wt} = (14.08 / 4.14) x 1000 lbs = 3399.7 lbs. Above this
+weight automatics are more fuel efficient than manual transmissions.
 
 \newpage
 
 \subsubsection{6. Appendix}\label{appendix}
 
-\includegraphics{RM_Project_files/figure-latex/unnamed-chunk-4-1.pdf}
+\includegraphics{RM_Project_Final_files/figure-latex/unnamed-chunk-4-1.pdf}
 
 \textbf{Fig 1} shows the clear interaction between weight (\textbf{wt})
 and transmission type (\textbf{am}) in affecting mileage. If this
 interaction was not present, the red (manual) and black (automatic)
-fitted lines would have been parallel. For example, at \textbf{wt} =
-2000 lbs, manual has better mileage than automatic. But, at \textbf{wt}
-= 3500 lbs, automatic has better mileage. Without interaction, the
-difference between manual and automatic would have been the same at 2000
-lbs and 3500 lbs (and elsewhere), i.e.~the lines would be parallel.
+fitted lines would have been parallel. For example, at a weight of 2000
+lbs, manual has better mileage than automatic. But, at a weight of 3500
+lbs, automatic has better mileage. Without interaction, the difference
+between manual and automatic would have been the same at 2000 lbs and
+3500 lbs (and elsewhere), i.e.~the lines would be parallel.
 
-\includegraphics{RM_Project_files/figure-latex/unnamed-chunk-5-1.pdf}
+\includegraphics{RM_Project_Final_files/figure-latex/unnamed-chunk-5-1.pdf}
 
 \section{Fig 2: Residual plot of Model
 2}\label{fig-2-residual-plot-of-model-2}
+
+\textbf{NOTE}: This report was authored in R Markdown and compiled to
+pdf using pdflatex (via knitr). To view the raw source, please visit the
+\href{https://github.com/rswamidasan/Regression-Models}{GitHub repo}
+associated with this project.
 
 \end{document}
